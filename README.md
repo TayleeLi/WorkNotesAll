@@ -194,7 +194,7 @@ Hello World
             直接赋值，不保留对象；
             直接保留对象，在dealloc方法中释放对象；
             释放旧对象，保留新对象，在dealloc方法中释放对象；
-            
+
     详解dealloc方法
         当对象的引用计数为0，系统会自动调用dealloc方法，回收内存。
             - (void)dealloc
