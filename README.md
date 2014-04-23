@@ -2,6 +2,11 @@ Hello World
 
 //2014_0319_1439
     Thanks for your sharing!
+    category->类目
+    extension->扩展
+    protocol->协议
+    case class->实例
+
 //2014_0321_1037
     读，仿，写，查
 //2014_0325_1105
@@ -231,12 +236,211 @@ Hello World
     除了alloc，new或copy之外的方法创建的对象都被声明了autorelease。谁retain，谁release。
     
 
+//2014_0412
+       0417
+*应用程序沙盒的基本概念
+*NSString类路径的处理常用方法
+*NSData类基本概念
+*NSFileManger——文件管理的常用操作
+*数据持久性——属性列表化
+*NSFileHandle——文件内容读取
 
+    文件管理
+        IOS中的沙盒（sandbox）机制
+        每个引用程序都有自己的独立的储存空间（沙盒）
+        一般来说应用程序是不可以相互访问
+        
+        沙盒目录文件的组成以及相关含义
+            我们创建应用程序时，在每个沙盒中含有三格文件。分别是Documents，Library和tmp
+            Documents 一般我们需要的持久的数据都放在这个目录中，你可以在当中添加子文件夹，尤其需要我们注意的是，iTunes备份和恢复的时候，会包括此目录。
+            Library 设置程序的默认设置和其他状态信息
+            tmp 创建临时文件目录，当我们的IOS设备重启时，文件会被自动清除
+            
+            获取程序的根目录 home
+            NSString *homePath = NSHomeDirectory();
+            获取Document目录
+            NSArrau *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+            NSString *docPath = [paths lastObject];
+            获取Library目录
+            NSArray *paths = NSSearthPathForDirectoriesInDomain(NSLibraryDirectory, NSUserDomainMask, YES);
+            NSString *docPath = [paths lastObject];
+            获取Library中的Cache
+            NSArray *paths = NSSearthPathForDirectoriesInDomain(NSCachesDirectory, NSUserDomainMask, YES);
+            NSString *docPath = [paths lastObject];
+            获取tmp路径
+            NSString *temp = NSTemporaryDirectory();
+            
+        NSString类路径处理方法
+            //对目录做处理：/Users/apple/testfile.text
+            NSString *path = @"/Userss/apple/testfile.text";
+            
+            常用处理方法如下：
+            //获得组成此路径的各个组成部分，结果：("/", "Users", "apple", "testfile.text")
+            - (NSArray *)pathComponents;
+            //提取路径的最后一个组成部分，结果：testfile.text
+            - (NSArray *)lastPathComponent;
+            //删除路径的最后一个组成部分，结果：/Users/apple
+            - (NSString *)stringByDeletingLastPathComponent;
+            //将path添加到现有路径的末尾，结果：/Users/apple/testfile.text/app.text
+            - (NSString *)stringByAppendingPathComponent:(NSString *)str;
+            //取路径最后部分的扩展名，结果：text
+            - (NSString *)pathExtension;
+            //删除路径最后部分的扩展名，结果：/Users/apple/testfile
+            - (NSString *)stringByDeletingPathExtendion;
+            //路径最后部分追加扩展名，结果：/Users/apple/testfile.text.jpg
+            - (NSString *)stringByAppendingPathExtension:(NSString *)str;
 
+        NSData的基本概念
+            NSData是用来包装数据用的
+            NSData存数的是二进制数据，这样就屏蔽了数据之间的差异，文本，音频，图像等数据都可以用NSData来存储
+            
+        文件管理常用类和方法
+            NSFileManager类
+                创建文件
+                读数据
+                写数据
+                重命名
+                移动文件
+                复制文件
+                删除文件
+                测试文件是否存在
+        数据持久性--属性列表化
+            字符串
+            数组
+            字典
+            
+            数组，字典只能将Bool，NSNumber，NSString，NSData，NSDate，NSArray，NSDictionary写入属性列表plist文件
+            
+        读取文件类和常用方法
+            NSFileManager类主要对文件的操作
 
+            NSFileHandle类主要对文件内容进行读取和写入操作
+                创建NSFileHandle对象
+                对打开文件进行I/O操作
+                关闭文件
+            NSFileHandle可以做文件断点续传
+            NSFileHandle只可以读写文件，不能创建文件，创建文件使用NSFileManager
     
+//2014_0419
+    复制对象，对象归档和单类
+    
+    复制对象的基本概念
+    
+    对象具备复制功能，必须实现
+        <NSCopying>协议
+        <NSMutableCopying>协议
+        常用的可复制对象有：NSNumber，NSString，NSArray，NSDictionary，NSMutableDictionary，NSMutableArray，NSMutableString
+    0421
+        复制对象的种类：
+            copy：产生对象的副本是不可变的
+            mutableCopy：产生的对象副本是可变的
+        copy和mutableCopy的区别
+            前者返回一个不可变对象副本，后者返回一个可变对象副本
+    
+    浅拷贝和深拷贝基本概念和用法
+        浅拷贝只复制对象本身，对象里属性，包含对象不做复制
+        深拷贝则即复制对象本身，对象的属性也会复制一份
+        Foundation框架中支持复制的类，默认是浅拷贝
 
+    对象的自定义拷贝
+        对象拥有复制特性，需实现NSCopying，NSMutableCopying协议，实现该协议的方法是copyWithZone和mutableCopyWithZone
+        
+    对象归档的基本概念和用法
+        对象归档是指将对象写入文件保存在硬盘上，当再次重新打开程序时，可以还原这些对象。你也可以称它为对象序列化，对象持久化
+        数据持久性的方式
+            NSKeyedArchiver——对象归档
+            NSUserDefaults
+            属性列表化（NSArray，NSDictionary保存文件）
+            SQlite数据库，Core Data数据库
+        归档形式
+            对Foundation库中对象进行归档
+            自定义对象进行归档（需要实现归档协议，NSCoding）
+        归档后的文件是加密的，属性类别是明文
+        
+    自定义内容归档
+        归档
+            使用NSData实例作为归档的存储数据
+            添加归档的内容（设置key与value）
+            完成归档
+            将归档数据存入磁盘中
+        解归档
+            从磁盘读取文件，生成NSData实例
+            根据Data实例创建和初始化解归档实例
+            解归档，根据key访问value的值
+    
+    自定义对象的归档基本概念
+        自定义的对象要支持归档，需要实现NSCoding协议
+        
+        NSCopying协议有两个方法，encodeWithCoder方法对对象的属性数据做编码处理
+                               initWithCoder解码归档数据来初始化对象
+        实现NSCoding协议后，就能通过NSKeyedArchiver归档
 
+        归档后的文件是加密的
+        
+    单例设计模式
+        设计原理是始终返回一个实例，即一个类始终只有一个实例
+        
+        创建单例的基本步骤
+            声明一个单件对象的静态实例，并初始化为nil
+            创建一个类的类工厂方法，生成一个该类的实例，并且仅当这个类的实例为nil时
+            覆盖allocWithZone：方法确保用户（程序员）在直接分配和初始化对象时，不会产生另一个对象。
+            实现NSCopying协议，覆盖release，autorelease，retain，retainCount方法，以此确保单例的状态
+            在多线程的环境中，注意使用@synchronized关键字，确保静态实例被正确的创建和初始化
+    
+        
+//2014_0422
+$KVC，KVO和谓词
+*KVC的基本概念和用法
+    基本调用方法 - valueForKey:
+               - setValue: forKey:
+    它们已字符串的形式向对象发送消息，字符串是我们关注属性的关键
+    是否存在setter，getter方法，如果不存在，它将在内部查找名为_key或者key的实例变量。通过KVC，可以获取不存在getter方法的对象值，无需通过对象指针直接访问
+    当我们通过setValue: forKey: 设置对象的值，或通过valueForKey来获取对象的值时，如若对象的实例变量为基本数据类型时（char，int，float，BOOL），我们需要对数据进行封装
+    
+    KVC的简单运算
+        sum, min, max, avg, count
+        NSString *count = [book valueForKeyPath:@"relativeBooks.@count"];
+        NSString *sum = [book valueForKeyPath:@"relativeBooks.@sum._price"];
+        NSString *avg = [book valueForKeyPath:@"relativeBooks.@avg._price"];
+        NSString *min = [book valueForKeyPath:@"relativeBooks.@min._price"];
+        NSString *max = [book valueForKeyPath:@"relativeBooks.@max._price"];
+
+*KVO的基本概念和用法
+    键-值观察使一种使对象获取其他对象的特定属性变化的通知机制
+    
+    键-值观察为所有对象提供自动观察兼容性。你可以通过禁用自动观察通知并实现手动通知来筛选通知
+
+*键值观察设计模式的基本概念 和用法
+    键-值编码是一个用于间接访问对象属性的机制，使用该机制不需要调用存取方法和变量实例就可以访问对象属性
+    键-值编码方法在Objective—C非正式（类目）NSKeyValueCoding中被声明，默认的实现方法由NSObject提供
+    键-值编码支持带有对象值的属性，同时也支持纯数值类型和结构，非对象参数和返回类型会被识别并自动封装/解封
+
+*谓词的基本概念和用法
+    cocoa中提供了NSPredicate类，指定过滤的条件。将符合条件的对象保留下来
+    创建谓词
+        //设置谓词条件
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"age <= 28"];
+        for (Person *person in array) {
+            //表示指定的对象是否满足谓词条件
+            if([predicate evaluateWithObject:person]){
+                //NSLog(@"person name : %@", person.name);
+            }
+        }
+        
+        //返回一个符合谓词条件的数组
+        NSArray *newArray = [array fileredArrayUsingPredicate:predicate];
+        
+        for (Person *person in newArray){
+            //NSLog(@"perosn name : %@", [person valueForKey:@"_name"]);
+        }
+
+        格式占位符
+        逻辑运算符
+            in
+        关键字
+            以**开始---BEGINSWITH
+            以**结束---ENDSWITH
+            包含---CONTAINS
 
 
 
