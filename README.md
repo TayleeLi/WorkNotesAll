@@ -389,58 +389,58 @@ Hello World
     
         
 //2014_0422
-$KVC，KVO和谓词
-*KVC的基本概念和用法
-    基本调用方法 - valueForKey:
-               - setValue: forKey:
-    它们已字符串的形式向对象发送消息，字符串是我们关注属性的关键
-    是否存在setter，getter方法，如果不存在，它将在内部查找名为_key或者key的实例变量。通过KVC，可以获取不存在getter方法的对象值，无需通过对象指针直接访问
-    当我们通过setValue: forKey: 设置对象的值，或通过valueForKey来获取对象的值时，如若对象的实例变量为基本数据类型时（char，int，float，BOOL），我们需要对数据进行封装
-    
-    KVC的简单运算
-        sum, min, max, avg, count
-        NSString *count = [book valueForKeyPath:@"relativeBooks.@count"];
-        NSString *sum = [book valueForKeyPath:@"relativeBooks.@sum._price"];
-        NSString *avg = [book valueForKeyPath:@"relativeBooks.@avg._price"];
-        NSString *min = [book valueForKeyPath:@"relativeBooks.@min._price"];
-        NSString *max = [book valueForKeyPath:@"relativeBooks.@max._price"];
+    //KVC，KVO和谓词
+    //KVC的基本概念和用法
+        基本调用方法 - valueForKey:
+                   - setValue: forKey:
+        它们已字符串的形式向对象发送消息，字符串是我们关注属性的关键
+        是否存在setter，getter方法，如果不存在，它将在内部查找名为_key或者key的实例变量。通过KVC，可以获取不存在getter方法的对象值，无需通过对象指针直接访问
+        当我们通过setValue: forKey: 设置对象的值，或通过valueForKey来获取对象的值时，如若对象的实例变量为基本数据类型时（char，int，float，BOOL），我们需要对数据进行封装
+        
+        KVC的简单运算
+            sum, min, max, avg, count
+            NSString *count = [book valueForKeyPath:@"relativeBooks.@count"];
+            NSString *sum = [book valueForKeyPath:@"relativeBooks.@sum._price"];
+            NSString *avg = [book valueForKeyPath:@"relativeBooks.@avg._price"];
+            NSString *min = [book valueForKeyPath:@"relativeBooks.@min._price"];
+            NSString *max = [book valueForKeyPath:@"relativeBooks.@max._price"];
 
-*KVO的基本概念和用法
-    键-值观察使一种使对象获取其他对象的特定属性变化的通知机制
-    
-    键-值观察为所有对象提供自动观察兼容性。你可以通过禁用自动观察通知并实现手动通知来筛选通知
+    //KVO的基本概念和用法
+        键-值观察使一种使对象获取其他对象的特定属性变化的通知机制
+        
+        键-值观察为所有对象提供自动观察兼容性。你可以通过禁用自动观察通知并实现手动通知来筛选通知
 
-*键值观察设计模式的基本概念 和用法
-    键-值编码是一个用于间接访问对象属性的机制，使用该机制不需要调用存取方法和变量实例就可以访问对象属性
-    键-值编码方法在Objective—C非正式（类目）NSKeyValueCoding中被声明，默认的实现方法由NSObject提供
-    键-值编码支持带有对象值的属性，同时也支持纯数值类型和结构，非对象参数和返回类型会被识别并自动封装/解封
+    //键值观察设计模式的基本概念 和用法
+        键-值编码是一个用于间接访问对象属性的机制，使用该机制不需要调用存取方法和变量实例就可以访问对象属性
+        键-值编码方法在Objective—C非正式（类目）NSKeyValueCoding中被声明，默认的实现方法由NSObject提供
+        键-值编码支持带有对象值的属性，同时也支持纯数值类型和结构，非对象参数和返回类型会被识别并自动封装/解封
 
-*谓词的基本概念和用法
-    cocoa中提供了NSPredicate类，指定过滤的条件。将符合条件的对象保留下来
-    创建谓词
-        //设置谓词条件
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"age <= 28"];
-        for (Person *person in array) {
-            //表示指定的对象是否满足谓词条件
-            if([predicate evaluateWithObject:person]){
-                //NSLog(@"person name : %@", person.name);
+    //谓词的基本概念和用法
+        cocoa中提供了NSPredicate类，指定过滤的条件。将符合条件的对象保留下来
+        创建谓词
+            //设置谓词条件
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"age <= 28"];
+            for (Person *person in array) {
+                //表示指定的对象是否满足谓词条件
+                if([predicate evaluateWithObject:person]){
+                    //NSLog(@"person name : %@", person.name);
+                }
             }
-        }
-        
-        //返回一个符合谓词条件的数组
-        NSArray *newArray = [array fileredArrayUsingPredicate:predicate];
-        
-        for (Person *person in newArray){
-            //NSLog(@"perosn name : %@", [person valueForKey:@"_name"]);
-        }
+            
+            //返回一个符合谓词条件的数组
+            NSArray *newArray = [array fileredArrayUsingPredicate:predicate];
+            
+            for (Person *person in newArray){
+                //NSLog(@"perosn name : %@", [person valueForKey:@"_name"]);
+            }
 
-        格式占位符
-        逻辑运算符
-            in
-        关键字
-            以**开始---BEGINSWITH
-            以**结束---ENDSWITH
-            包含---CONTAINS
+            格式占位符
+            逻辑运算符
+                in
+            关键字
+                以**开始---BEGINSWITH
+                以**结束---ENDSWITH
+                包含---CONTAINS
 
 
 
